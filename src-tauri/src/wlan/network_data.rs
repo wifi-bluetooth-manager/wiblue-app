@@ -21,6 +21,7 @@ pub struct WifiNetwork {
     // Maximum speed in Mbps (if available)
     pub speed: Option<u32>,
 
+    pub network_mode: Networkmode,
     pub currently_used: bool,
 }
 
@@ -35,6 +36,7 @@ pub struct NmcliNetwork {
 }
 
 // Enum for Wi-Fi network modes
+#[derive(Debug, Clone, Serialize, strum_macros::Display)]
 pub enum Networkmode {
     // Standard network where devices connect to an access point (AP)
     INFRA,
