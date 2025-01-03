@@ -84,7 +84,7 @@ impl network_data::WifiNetwork {
 
             // Split by lines and process them
             let mut ssid = String::new();
-            for line in bssid_search_fields.lines() {
+            for line in bssid_search_fields.lines().skip(1) {
                 let parts: Vec<&str> = line.split_whitespace().collect();
 
                 if parts.len() > 1 {
