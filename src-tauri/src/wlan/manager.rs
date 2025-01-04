@@ -3,7 +3,7 @@ use super::{
     network_data::{Networkmode, WifiNetwork, WifiSecurity},
     networkmanager_error::NetworkManagerError,
 };
-use std::process::Command;
+use std::{collections::VecDeque, process::Command};
 
 impl network_data::WifiNetwork {
     pub fn get_networks() -> Result<Vec<Self>, NetworkManagerError> {
@@ -65,6 +65,35 @@ impl network_data::WifiNetwork {
                 "Repeater" => Networkmode::REPEATER,
                 _ => Networkmode::INFRA,
             };
+            let modes = vec![
+                Networkmode::INFRA,
+                Networkmode::IBSS,
+                Networkmode::MONITOR,
+                Networkmode::MESH,
+                Networkmode::CLIENT,
+                Networkmode::AP,
+                Networkmode::WDS,
+                Networkmode::P2P,
+                Networkmode::BRIDGE,
+                Networkmode::REPEATER,
+            ];
+
+            // Convert enum variants to strings
+            let mode_strings: Vec<String> = modes.iter().map(|mode| mode.to_string()).collect();
+            let mode_strings_lower: Vec<String> = mode_strings
+                .iter()
+                .map(|mode| mode.to_lowercase())
+                .collect();
+            let mode_strings_capital_first: Vec<String> = mode_strings_lower
+                .iter()
+                .map(|mode| {
+                    let mut chars = mode.chars();
+                    match chars.next() {
+                        Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
+                        None => String::new(),
+                    }
+                })
+                .collect();
 
             // Fetch SSID based on the BSSID
             let bssid_search_output = Command::new("nmcli")
@@ -84,11 +113,30 @@ impl network_data::WifiNetwork {
 
             // Split by lines and process them
             let mut ssid = String::new();
+            let mut ssid_parts = Vec::new();
             for line in bssid_search_fields.lines().skip(1) {
                 let parts: Vec<&str> = line.split_whitespace().collect();
 
+                // dopoki nie spotkam slowa z mode powinienem sprawdzac to
+                // for part in parts
+                //
+
                 if parts.len() > 1 {
-                    ssid = parts[1].to_string(); // The second field should be SSID
+                    let mut deque = VecDeque::from(parts);
+                    deque.pop_front(); // Remove the first element
+
+                    for part in deque {
+                        if mode_strings.contains(&part.to_string())
+                            || mode_strings_lower.contains(&part.to_string())
+                            || mode_strings_capital_first.contains(&part.to_string())
+                        {
+                            break;
+                        }
+                        ssid_parts.push(part.to_string());
+                    }
+
+                    //ssid = parts[1].to_string();
+                    ssid = ssid_parts.join(" ");
                     break; // Assuming we only care about the first match
                 }
             }
