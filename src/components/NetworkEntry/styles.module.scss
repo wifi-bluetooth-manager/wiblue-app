@@ -1,0 +1,10 @@
+.networks_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    div {
+        margin: 0.7rem;
+        text-align: left;
+    }
+}
