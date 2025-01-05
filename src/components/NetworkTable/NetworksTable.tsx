@@ -22,8 +22,8 @@ export default function NetworkTable({ networks }: NetworkTableProps) {
           <div>Speed</div>
           <div>Connect</div>
         </div>
-        {networks.map((nt) => (
-          <NetworkEntry network={nt} />
+        {networks.map((nt, i) => (
+          <NetworkEntry network={nt} key={i} />
         ))}
       </div>
     </>

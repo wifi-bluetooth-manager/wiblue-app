@@ -1,5 +1,3 @@
-use std::f32::consts::PI;
-
 use wlan::manager::WifiManager;
 use wlan::network_data::WifiNetwork;
 use wlan::networkmanager_error::WifiConnectionError;
@@ -19,7 +17,9 @@ impl JsonResponse {
             status,
         };
 
-        serde_json::to_string(&response).unwrap()
+        let r = serde_json::to_string(&response).unwrap();
+        println!("res: {}", r);
+        return r;
     }
 }
 
@@ -36,6 +36,7 @@ fn scan() -> String {
 
 #[tauri::command]
 fn network_connect(bssid: String, password: String) -> Result<String, String> {
+    println!("bssid: {} \n password: {}", bssid.clone(), password.clone());
     let temp_password: Option<&str> = if password.is_empty() {
         None
     } else {

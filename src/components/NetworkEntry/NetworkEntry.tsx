@@ -1,5 +1,8 @@
+import { invoke } from "@tauri-apps/api/core";
 import { WifiNetwork } from "../../types/network";
 import styles from "./styles.module.scss";
+import { JsonResponse } from "../../types/jsonresponse";
+import { useState } from "react";
 
 export type NetworkEntryProps = {
   network: WifiNetwork;
@@ -7,6 +10,25 @@ export type NetworkEntryProps = {
 
 export default function NetworkEntry({ network }: NetworkEntryProps) {
   //console.log(`Name: ${network.ssid} \n Mode: ${network.networkMode}`);
+  const [_password, setPassword] = useState<string>("");
+
+  const connect = (_bssid: string) => {
+    const result = invoke("network_connect", {
+      bssid: _bssid,
+      password: _password,
+    });
+    result
+      .then((r) => {
+        const response: JsonResponse = JSON.parse(r as string);
+        console.log(response.message);
+      })
+      .catch((er) => {
+        const errorResponse: JsonResponse = JSON.parse(er as string);
+        console.log(errorResponse.message);
+        console.log(errorResponse.status);
+      });
+  };
+
   return (
     <>
       <div className={styles.networks_container}>
@@ -24,7 +46,9 @@ export default function NetworkEntry({ network }: NetworkEntryProps) {
         <div className={styles.ssid}>{network.bssid}</div>
         <div className={styles.ssid}>{network.speed}</div>
         {/* as an argument to connect will be bssid since it is allways correct and password will be needed when network needs it and will be stored for future use in db or locally however user wants */}
-        <div className={styles.connect}>Connect</div>
+        <div className={styles.connect} onClick={() => connect(network.bssid)}>
+          Connect
+        </div>
       </div>
     </>
   );

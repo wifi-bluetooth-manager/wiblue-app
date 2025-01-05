@@ -8,7 +8,7 @@ function App() {
   const [nt, setNetworks] = useState<WifiNetwork[] | null>(null);
 
   const getNetworks = async () => {
-    let raw_fetched_networks = await invoke<string>("get_networks");
+    let raw_fetched_networks = await invoke<string>("scan");
     console.log(raw_fetched_networks);
     const fetched_networks: WifiNetwork[] = JSON.parse(
       raw_fetched_networks,
