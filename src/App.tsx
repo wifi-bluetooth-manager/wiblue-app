@@ -1,21 +1,23 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
-import { WifiNetwork } from "./types/network";
+import { WifiNetwork, NetworkMode } from "./types/network";
+import NetworkTable from "./components/NetworkTable/NetworksTable";
 
 function App() {
-  const [networks, setNetworks] = useState<WifiNetwork[] | null>(null);
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    // setGreetMsg(await invoke("greet", { name }));
-  }
+  const [nt, setNetworks] = useState<WifiNetwork[] | null>(null);
 
   const getNetworks = async () => {
     let raw_fetched_networks = await invoke<string>("get_networks");
     console.log(raw_fetched_networks);
-    let fetched_networks: WifiNetwork[] = JSON.parse(raw_fetched_networks);
+    const fetched_networks: WifiNetwork[] = JSON.parse(
+      raw_fetched_networks,
+    ).map((network: any) => ({
+      ...network,
+      signalStrength: network.signal_strength, // Convert number to string if needed
+      networkMode: network.network_mode.toUpperCase() as NetworkMode, // Map to enum if applicable
+    }));
     setNetworks(fetched_networks);
-    console.log(fetched_networks ?? "no network");
   };
 
   return (
@@ -27,6 +29,7 @@ function App() {
       >
         Get Networks{" "}
       </button>
+      {nt ? <NetworkTable networks={nt} /> : <div>No networks</div>}
     </main>
   );
 }

@@ -3,9 +3,11 @@ export type WifiNetwork = {
   bssid: string;
   signalStrength: string;
   frequency: number;
+  channel: number;
   security: WifiSecurity;
   isHidden: boolean;
   speed: number | null;
+  currentlyUsed: boolean;
   networkMode: NetworkMode;
 };
 

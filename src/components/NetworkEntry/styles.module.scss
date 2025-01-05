@@ -1,10 +1,31 @@
 .networks_container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: left;
 
     div {
-        margin: 0.7rem;
+        margin: 1rem;
+        width: 8vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    div:not(.connect) {
         text-align: left;
+    }
+    .connect {
+        text-align: center;
+        background: #32a852;
+        border-radius: 0.5rem;
+
+        &:hover {
+            background: #3287e3;
+            transition: 0.2s;
+            transform: scale(1.2);
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: pointer;
+        }
     }
 }

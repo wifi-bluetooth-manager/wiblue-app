@@ -43,7 +43,7 @@ impl network_data::WifiNetwork {
             let signal_strength = fields[1].parse::<i32>().unwrap_or_default();
             let frequency = fields[2].parse::<u32>().unwrap_or_default();
             let channel = fields[3].parse::<u8>().unwrap_or_default();
-            let security = match fields[4] {
+            let security = match fields[5] {
                 "OPEN" => WifiSecurity::OPEN,
                 "WEP" => WifiSecurity::WEP,
                 "WPA" => WifiSecurity::WPA,
@@ -52,7 +52,7 @@ impl network_data::WifiNetwork {
                 _ => WifiSecurity::UNKNOWN,
             };
 
-            let network_mode = match fields[5] {
+            let network_mode = match fields[6] {
                 "Infra" => Networkmode::INFRA,
                 "Ad-Hoc" => Networkmode::IBSS,
                 "Monitor" => Networkmode::MONITOR,
