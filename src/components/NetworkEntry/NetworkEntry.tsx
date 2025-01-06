@@ -3,6 +3,7 @@ import { WifiNetwork } from "../../types/network";
 import styles from "./styles.module.scss";
 import { JsonResponse } from "../../types/jsonresponse";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export type NetworkEntryProps = {
   network: WifiNetwork;
@@ -11,6 +12,7 @@ export type NetworkEntryProps = {
 export default function NetworkEntry({ network }: NetworkEntryProps) {
   //console.log(`Name: ${network.ssid} \n Mode: ${network.networkMode}`);
   const [_password, setPassword] = useState<string>("");
+  const [errorStatus, setErrorStatus] = useState<number | null>(null);
 
   const connect = (_bssid: string) => {
     const result = invoke("network_connect", {
@@ -24,8 +26,20 @@ export default function NetworkEntry({ network }: NetworkEntryProps) {
       })
       .catch((er) => {
         const errorResponse: JsonResponse = JSON.parse(er as string);
+        const status = errorResponse.status;
         console.log(errorResponse.message);
-        console.log(errorResponse.status);
+        console.log(status);
+
+        if (status === 502) {
+          toast.error("Password is needed");
+        } else if (status === 401) {
+          toast.error("Wrong password");
+        } else if (status === 500) {
+          toast.error("Unknown Error");
+        } else if (status === 404) {
+          toast.error("No such network");
+        }
+        setErrorStatus(status);
       });
   };
 
