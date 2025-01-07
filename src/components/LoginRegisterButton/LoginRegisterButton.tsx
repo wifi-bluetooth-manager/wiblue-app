@@ -1,8 +1,4 @@
-"use client";
-
-import Themes from "../../constants/themes";
-import useUserContext from "../../contexts/userContextProvider";
-
+import styles from "./styles.module.scss";
 type ButtonProps = {
   type: "submit" | "button" | "image";
   value?: string;
@@ -17,7 +13,7 @@ type ButtonProps = {
   src?: string;
 };
 
-const Button = ({
+const LoginRegisterButton = ({
   type,
   value = undefined,
   className = undefined,
@@ -31,10 +27,6 @@ const Button = ({
   src = undefined,
   ...props
 }: ButtonProps) => {
-  const { User } = useUserContext();
-  const themeColor = User.theme === Themes.dark ? "#000000" : "#FFFFFF";
-  const frameColor = User.theme === Themes.dark ? "#FFFFFF" : "#000000";
-
   return (
     <input
       {...props}
@@ -42,12 +34,9 @@ const Button = ({
       value={value}
       onClick={onClick}
       src={type === "image" ? src : ""}
-      className={
-        className ??
-        ` ${bgColor ?? "bg-mc-blue"} ${textColor ?? "text-white"} ${rounded === true ? "rounded-2xl" : ""} max-w-64 min-w-30 ${customWidth ?? "w-[30vw]"} max-h-12 min-h-8 ${customHeight ?? "h-[10vh]"} font-bold  ${hoverEffect === true ? "hover:scale-110" : ""} duration-300 cursor-pointer`
-      }
+      className={styles.login_register_button}
     />
   );
 };
 
-export default Button;
+export default LoginRegisterButton;

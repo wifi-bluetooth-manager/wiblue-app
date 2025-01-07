@@ -1,12 +1,14 @@
 import NavbarModel from "../../components/NavbarModel/NavbarModel";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import OLF from "../../Olf/olf";
 import FormErrorWrap from "../../components/FormError/FormErrorWrap";
-import FormErrorParahraph from "../../components/FormError/FormErrorParagraph";
+import FormErrorParagraph from "../../components/FormError/FormErrorParagraph";
 import AuthConst from "../../constants/auth";
-import Button from "../../components/Button/Button";
+import ApiLinks from "../../constants/apilinks";
+import styles from "./styles.module.scss";
+import LoginRegisterButton from "../../components/LoginRegisterButton/LoginRegisterButton";
 import Regex from "../../constants/regex";
 
 const Login = () => {
@@ -23,7 +25,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     getValues,
     setError,
   } = useForm<formProps>();
@@ -49,23 +51,29 @@ const Login = () => {
   return (
     <>
       <NavbarModel />
-      <section className="text-mc-text transition-colors duration-500 bg-mc-primary w-[45vw] min-w-72 opacity-95 rounded-[3rem] mt-auto mb-auto">
-        <article className="flex flex-col items-center justify-center mt-12 mb-12">
-          <header className="text-3xl font-bold mt-8 mb-8 mr-6 ml-6 text-center">
-            Login to Morning Compass account
-          </header>
-          <form
-            className="flex flex-col items-center justify-center gap-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
+      <section className={styles.container}>
+        <article>
+          <header>Login to WiBlue account</header>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FormErrorWrap>
               <input
                 {...register("credential", {
                   validate: (cred) => {
-                    if (cred && cred.includes("@")) {
+                    if (!cred) {
+                      return "Credential is required";
+                    }
+                    if (cred.includes("@")) {
+                      setLoginOption("email");
                       const regexResult = Regex.emailRegistration.test(cred);
                       if (!regexResult) {
                         return "Email must be correct";
+                      }
+                      return true;
+                    } else {
+                      setLoginOption("username");
+                      const regexResult = Regex.usernameModification.test(cred);
+                      if (!regexResult) {
+                        return "Username must be correct";
                       }
                       return true;
                     }
@@ -78,9 +86,8 @@ const Login = () => {
                 type="text"
                 placeholder="Email or Username"
                 name="credential"
-                className="border-4 bg-white text-black border-solid rounded-2xl max-w-[40rem] min-w-56 w-[30vw] max-h-12 min-h-8 h-[10vh] pl-4 pr-4 duration-300 focus:scale-110 focus:outline-none focus:bg-slate-800 focus:text-emerald-500 focus:border-slate-800"
               />
-              <FormErrorParahraph errorObject={errors.credential} />
+              <FormErrorParagraph errorObject={errors.credential} />
             </FormErrorWrap>
             <FormErrorWrap>
               <input
@@ -91,28 +98,20 @@ const Login = () => {
                   },
                   required: {
                     value: true,
-                    message: "Password is requiered",
+                    message: "Password is required",
                   },
                 })}
                 type="password"
                 placeholder="Password"
                 name="password"
-                className="border-4 bg-white text-black border-solid rounded-2xl max-w-[40rem] min-w-56 w-[30vw] max-h-12 min-h-8 h-[10vh] pl-4 pr-4 duration-300 focus:scale-110 focus:outline-none focus:bg-slate-800 focus:text-emerald-500 focus:border-slate-800"
               />
-              <FormErrorParahraph errorObject={errors.password} />
+              <FormErrorParagraph errorObject={errors.password} />
             </FormErrorWrap>
-            <Button type="submit" value="Login" />
+            <LoginRegisterButton type="submit" value="Login" />
           </form>
-          <figure className="flex items-center justify-evenly p-6">
-            <p className="select-none mr-4 ml-4 text-center">
-              Don't have account?
-            </p>
-            <Link
-              to={"/register"}
-              className="text-mc-text hover:scale-110 duration-300 ml-4 mr-4 font-bold"
-            >
-              Register here
-            </Link>
+          <figure>
+            <p>Don't have an account?</p>
+            <Link to="/register">Register here</Link>
           </figure>
         </article>
       </section>

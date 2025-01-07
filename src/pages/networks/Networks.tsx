@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { NetworkMode, WifiNetwork } from "../../types/network";
 import { invoke } from "@tauri-apps/api/core";
 import NetworkTable from "../../components/NetworkTable/NetworksTable";
@@ -21,6 +21,18 @@ export default function Networks() {
     setNetworks(fetched_networks);
   };
 
+  useLayoutEffect(() => {
+    getNetworks();
+    timer();
+  }, []);
+
+  const timer = async () => {
+    setInterval(() => {
+      getNetworks();
+      console.log("Scanning...");
+    }, 5000);
+  };
+
   return (
     <>
       <main className="container">
@@ -29,7 +41,7 @@ export default function Networks() {
             getNetworks();
           }}
         >
-          Get Networks{" "}
+          Refresh
         </button>
         {nt ? <NetworkTable networks={nt} /> : <div>No networks</div>}
       </main>
