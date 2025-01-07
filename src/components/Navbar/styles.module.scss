@@ -1,0 +1,97 @@
+@use "../../variables.scss";
+// Shared styles
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: variables.$wb-primary;
+    color: variables.$wb-text;
+    min-height: 4rem;
+    width: 100vw;
+    font-weight: bold;
+    transition: color 0.5s;
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+        align-items: center;
+        justify-content: start;
+        width: 100%;
+
+        @media (max-width: 640px) {
+            flex-direction: column;
+            margin-left: 1rem;
+            align-items: center;
+            margin-bottom: 0;
+        }
+    }
+
+    &__element {
+        margin-right: 3vw;
+        margin-left: 3vw;
+        display: flex;
+        justify-content: center;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            font-size: 1.25rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            transition:
+                color 0.2s,
+                transform 0.2s;
+
+            &:hover {
+                color: variables.$youai-light-red;
+                transform: scale(1);
+            }
+        }
+    }
+
+    &__user {
+        margin-left: auto;
+        background: linear-gradient(to right, cyan, variables.$wb-yellow);
+        color: #f5f5f5; // Equivalent to text-gray-100
+        padding: 0.5rem 2rem; // Equivalent to pt-2 pb-2 pr-8 pl-8
+        border-radius: 2.5rem; // Equivalent to rounded-[2.5rem]
+
+        &__info {
+            color: variables.$wb-white;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem; // Equivalent to gap-4
+
+            img {
+                border-radius: 50%; // Equivalent to rounded-full
+                aspect-ratio: 1;
+            }
+
+            .cogwheel {
+                display: grid;
+                place-items: center;
+                border-radius: 50%; // Equivalent to rounded-[100%]
+            }
+        }
+    }
+}
+
+// Utility classes (if needed)
+.wb-primary {
+    background-color: variables.$wb-primary;
+}
+
+.wb-text {
+    color: variables.$wb-text;
+}
+
+.wb-yellow {
+    background-color: variables.$wb-yellow;
+}
+
+.wb-white {
+    color: variables.$wb-white;
+}

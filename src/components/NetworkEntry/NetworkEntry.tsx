@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { WifiNetwork } from "../../types/network";
+import styles from "./styles.module.scss";
 import { JsonResponse } from "../../types/jsonresponse";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -8,15 +9,8 @@ export type NetworkEntryProps = {
   network: WifiNetwork;
 };
 
-const NetworkDataContainer = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="mx-4 w-[8vw] overflow-hidden text-ellipsis whitespace-nowrap">
-      {children}
-    </div>
-  );
-};
-
 export default function NetworkEntry({ network }: NetworkEntryProps) {
+  //console.log(Name: ${network.ssid} \n Mode: ${network.networkMode});
   const [_password, setPassword] = useState<string>("");
   const [errorStatus, setErrorStatus] = useState<number | null>(null);
 
@@ -52,28 +46,22 @@ export default function NetworkEntry({ network }: NetworkEntryProps) {
 
   return (
     <>
-      <div className="flex flex-row justify-start items-center bg-black">
-        <div className="flex flex-row">
-          <NetworkDataContainer>{network.ssid}</NetworkDataContainer>
-          <NetworkDataContainer>
-            {network.currentlyUsed ? "Yes" : "No"}
-          </NetworkDataContainer>
-          <NetworkDataContainer>{network.signalStrength}</NetworkDataContainer>
-          <NetworkDataContainer>{network.security}</NetworkDataContainer>
-          <NetworkDataContainer>
-            {network.networkMode || "Unknown"}
-          </NetworkDataContainer>
-          <NetworkDataContainer>{network.frequency}</NetworkDataContainer>
-          <NetworkDataContainer>
-            {network.isHidden ? "Yes" : "No"}
-          </NetworkDataContainer>
-          <NetworkDataContainer>{network.bssid}</NetworkDataContainer>
-          <NetworkDataContainer>{network.speed}</NetworkDataContainer>
-        </div>
-        <div
-          className="mx-4 w-[8vw] text-center bg-green-500 rounded-lg hover:bg-blue-500 hover:scale-110 transition duration-200 transform cursor-pointer select-none"
-          onClick={() => connect(network.bssid)}
-        >
+      <div className={styles.networks_container}>
+        <div className={styles.ssid}>{network.ssid}</div>
+        {network.currentlyUsed ? <div>Yes</div> : <div>No</div>}
+        <div className={styles.ssid}>{network.signalStrength}</div>
+        <div className={styles.ssid}>{network.security}</div>
+        {network.networkMode ? (
+          <div>{network.networkMode}</div>
+        ) : (
+          <div>Unknown</div>
+        )}
+        <div className={styles.ssid}>{network.frequency}</div>
+        {network.isHidden ? <div>Yes</div> : <div>No</div>}
+        <div className={styles.ssid}>{network.bssid}</div>
+        <div className={styles.ssid}>{network.speed}</div>
+        {/* as an argument to connect will be bssid since it is allways correct and password will be needed when network needs it and will be stored for future use in db or locally however user wants */}
+        <div className={styles.connect} onClick={() => connect(network.bssid)}>
           Connect
         </div>
       </div>
