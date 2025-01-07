@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import useUserContext from "./contexts/userContextProvider.tsx";
 
 function App() {
-  const { User, UserDispatch } = useUserContext();
+  const { UserDispatch } = useUserContext();
   useEffect(() => {
     UserDispatch({ type: "setUsername", value: "tomek" });
     UserDispatch({ type: "setId", value: "123j-25as-09vf-123b" });
