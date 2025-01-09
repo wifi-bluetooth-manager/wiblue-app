@@ -11,8 +11,8 @@ export default function NetworkTable({ networks }: NetworkTableProps) {
     <>
       <div className={styles.networks_container}>
         <div className={styles.title}>
-          <div>Name</div>
           <div>Now used</div>
+          <div>Name</div>
           <div>Signal</div>
           <div>Security</div>
           <div>Mode</div>

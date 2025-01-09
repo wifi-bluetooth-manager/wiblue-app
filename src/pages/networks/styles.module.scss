@@ -1,33 +1,21 @@
 @use "../../variables.scss";
 
-.networks_container {
+.container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
 
-    div {
-        margin: 1rem;
-        width: 8vw;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    div:not(.connect):not(.currently_used) {
-        text-align: left;
-    }
-    .currently_used {
-        text-align: right;
-        font-size: 2rem;
-    }
-
-    .connect {
+    .refresh {
         text-align: center;
         color: white;
         background: variables.$wb-hover-bg;
         border-radius: 0.5rem;
         padding: 1.2vh;
         text-align: center;
+        width: 20%;
+        margin: 3rem;
+
         transition:
             transform 0.3s ease-in-out,
             background-color 0.3s ease-in-out,
@@ -38,7 +26,7 @@
             background-color: variables.$wb-accent-green;
             color: variables.$wb-hover-text;
             border-color: variables.$wb-hover-border;
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
 
         &:active {

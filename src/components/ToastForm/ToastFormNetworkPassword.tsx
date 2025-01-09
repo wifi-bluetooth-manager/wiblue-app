@@ -7,12 +7,15 @@ import toast, { Toast } from "react-hot-toast";
 
 type ToastFormNetworkPasswordProps = {
   t: Toast;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  // setPassword: React.Dispatch<React.SetStateAction<string>>;
+  _bssid: string;
+  connect: (_bssid: string, p: string) => void;
 };
 
 const ToastFormNetworkPassword = ({
   t,
-  setPassword,
+  _bssid,
+  connect,
 }: ToastFormNetworkPasswordProps) => {
   type formProps = {
     password: string;
@@ -22,12 +25,11 @@ const ToastFormNetworkPassword = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    getValues,
-    setError,
   } = useForm<formProps>();
 
   const onSubmit: SubmitHandler<formProps> = async (data) => {
-    setPassword(data.password);
+    connect(_bssid, data.password); // Pass the BSSID and password back to `connect`
+    toast.dismiss(t.id); // Dismiss the toast once submitted
   };
 
   return (
@@ -41,7 +43,7 @@ const ToastFormNetworkPassword = ({
                 message: "Password is required",
               },
             })}
-            type="text"
+            type="password"
             placeholder="Password"
             name="password"
             className={styles.input_field}

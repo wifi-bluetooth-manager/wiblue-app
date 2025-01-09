@@ -1,3 +1,5 @@
+@use "../../variables.scss";
+
 .toast_container {
     display: flex;
     flex-direction: column;
@@ -7,10 +9,69 @@
     .login_form {
         display: flex;
         flex-direction: row;
-        .login {
+        .connect {
+            text-align: center;
+            color: white;
+            background: variables.$wb-hover-bg;
+            border-radius: 0.5rem;
+            text-align: center;
+            transition:
+                transform 0.3s ease-in-out,
+                background-color 0.3s ease-in-out,
+                color 0.3s ease-in-out,
+                border-color 0.3s ease-in-out;
+
+            &:hover {
+                background-color: variables.$wb-accent-green;
+                color: variables.$wb-hover-text;
+                border-color: variables.$wb-hover-border;
+                transform: scale(1.05);
+            }
+
+            &:active {
+                transform: scale(0.95);
+                background-color: variables.$wb-active-bg;
+                border-color: variables.$wb-active-border;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: variables.$wb-focus-border;
+                box-shadow: 0 0 10px variables.$wb-focus-border;
+            }
         }
     }
 
-    .container {
+    .cancel {
+        text-align: center;
+        color: white;
+        background: variables.$wb-hover-bg;
+        border-radius: 0.5rem;
+        text-align: center;
+        width: 60%;
+        transition:
+            transform 0.3s ease-in-out,
+            background-color 0.3s ease-in-out,
+            color 0.3s ease-in-out,
+            border-color 0.3s ease-in-out;
+
+        &:hover {
+            background-color: variables.$wb-accent-green;
+            color: variables.$wb-hover-text;
+            border-color: variables.$wb-hover-border;
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.95);
+            background-color: variables.$wb-active-bg;
+            border-color: variables.$wb-active-border;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: variables.$wb-focus-border;
+            box-shadow: 0 0 10px variables.$wb-focus-border;
+        }
     }
 }

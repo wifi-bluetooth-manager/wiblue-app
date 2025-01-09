@@ -3,6 +3,8 @@ import { NetworkMode, WifiNetwork } from "../../types/network";
 import { invoke } from "@tauri-apps/api/core";
 import NetworkTable from "../../components/NetworkTable/NetworksTable";
 import toast from "react-hot-toast";
+import styles from "./styles.module.scss";
+import LoginRegisterButton from "../../components/LoginRegisterButton/LoginRegisterButton";
 
 export default function Networks() {
   const [nt, setNetworks] = useState<WifiNetwork[] | null>(null);
@@ -48,14 +50,15 @@ export default function Networks() {
 
   return (
     <>
-      <main className="container">
-        <button
+      <main className={styles.container}>
+        <input
+          type="button"
           onClick={() => {
             getNetworks();
           }}
-        >
-          Refresh
-        </button>
+          value="Refresh"
+          className={styles.refresh}
+        />
         {nt ? <NetworkTable networks={nt} /> : <div>No networks</div>}
       </main>
     </>
