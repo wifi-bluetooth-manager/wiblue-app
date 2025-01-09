@@ -6,4 +6,5 @@ pub enum WifiConnectionError {
     WrongPassword,
     NoSuchNetwork,
     UnknownError,
+    AskingError,
 }

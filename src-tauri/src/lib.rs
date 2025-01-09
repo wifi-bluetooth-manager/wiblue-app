@@ -53,7 +53,9 @@ fn network_connect(bssid: String, password: String) -> Result<String, String> {
                 Err(JsonResponse::new("No password provided", 502))
             }
             WifiConnectionError::WrongPassword => Err(JsonResponse::new("Wrong password", 401)),
-            WifiConnectionError::UnknownError => Err(JsonResponse::new("Unknown error", 500)),
+            WifiConnectionError::UnknownError | WifiConnectionError::AskingError => {
+                Err(JsonResponse::new("Unknown error", 500))
+            }
         },
     }
 }

@@ -32,13 +32,19 @@ export default function NetworkEntry({ network }: NetworkEntryProps) {
         console.log(status);
 
         if (status === 502) {
-          toast((t) => (
-            <ToastFormNetworkPassword
-              t={t}
-              _bssid={_bssid}
-              connect={(bssid, password) => connect(bssid, password)}
-            />
-          ));
+          toast(
+            (t) => (
+              <ToastFormNetworkPassword
+                t={t}
+                _bssid={_bssid}
+                connect={(bssid, password) => connect(bssid, password)}
+              />
+            ),
+            {
+              id: "toast",
+              duration: Infinity,
+            },
+          );
         } else if (status === 401) {
           toast.error("Wrong password");
         } else if (status === 500) {

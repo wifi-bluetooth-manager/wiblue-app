@@ -15,7 +15,7 @@ export default function Networks() {
     if (isScanning) return;
     setIsScanning(true);
     try {
-      toast.success("scanning");
+      toast.success("scanning", { id: "scannertoast" });
       let raw_fetched_networks = await invoke<string>("scan");
       console.log(raw_fetched_networks);
 
