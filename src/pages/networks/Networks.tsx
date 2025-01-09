@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NetworkMode, WifiNetwork } from "../../types/network";
 import { invoke } from "@tauri-apps/api/core";
 import NetworkTable from "../../components/NetworkTable/NetworksTable";
@@ -7,30 +7,43 @@ import toast from "react-hot-toast";
 export default function Networks() {
   const [nt, setNetworks] = useState<WifiNetwork[] | null>(null);
 
+  const [isScanning, setIsScanning] = useState(false);
+
   const getNetworks = async () => {
-    // toast.success("scanning");
-    let raw_fetched_networks = await invoke<string>("scan");
-    console.log(raw_fetched_networks);
-    const fetched_networks: WifiNetwork[] = JSON.parse(
-      raw_fetched_networks,
-    ).map((network: any) => ({
-      ...network,
-      signalStrength: network.signal_strength, // Convert number to string if needed
-      networkMode: network.network_mode.toUpperCase() as NetworkMode, // Map to enum if applicable
-    }));
-    setNetworks(fetched_networks);
+    if (isScanning) return;
+    setIsScanning(true);
+    try {
+      toast.success("scanning");
+      let raw_fetched_networks = await invoke<string>("scan");
+      console.log(raw_fetched_networks);
+
+      const fetched_networks: WifiNetwork[] = JSON.parse(
+        raw_fetched_networks,
+      ).map((network: any) => ({
+        ...network,
+        currentlyUsed: network.currently_used,
+        signalStrength: network.signal_strength,
+        networkMode: network.network_mode.toUpperCase() as NetworkMode,
+      }));
+      console.log(fetched_networks);
+      setNetworks(fetched_networks);
+    } catch (error) {
+      console.error("Error fetching networks:", error);
+    } finally {
+      setIsScanning(false);
+    }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     getNetworks();
-    timer();
+    //timer();
   }, []);
 
   const timer = async () => {
-    setInterval(() => {
-      getNetworks();
+    setInterval(async () => {
+      await getNetworks();
       console.log("Scanning...");
-    }, 5000);
+    }, 10000);
   };
 
   return (

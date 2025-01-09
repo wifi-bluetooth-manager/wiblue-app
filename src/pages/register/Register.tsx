@@ -36,7 +36,7 @@ export default function Login() {
   return (
     <>
       <NavbarModel />
-      <section className={styles.register_container}>
+      <section className={styles.container}>
         <article className={styles.login_form}>
           <header className={styles.login_header}>Create WiBlue account</header>
           <form className={styles.login_form} onSubmit={handleSubmit(onSubmit)}>

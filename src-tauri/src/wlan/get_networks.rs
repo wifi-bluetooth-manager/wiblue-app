@@ -11,7 +11,7 @@ pub fn get_networks() -> Result<Vec<WifiNetwork>, WifiManagerError> {
     let output_without_ssid = Command::new("nmcli")
         .args([
             "-f",
-            "BSSID,SIGNAL,FREQ,CHAN,SECURITY,MODE",
+            "ACTIVE,BSSID,SIGNAL,FREQ,CHAN,SECURITY,MODE",
             "device",
             "wifi",
         ])
@@ -37,11 +37,12 @@ pub fn get_networks() -> Result<Vec<WifiNetwork>, WifiManagerError> {
         }
 
         // Properly extract BSSID
-        let bssid = fields[0].to_string(); // The second field should be BSSID
-        let signal_strength = fields[1].parse::<i32>().unwrap_or_default();
-        let frequency = fields[2].parse::<u32>().unwrap_or_default();
-        let channel = fields[3].parse::<u8>().unwrap_or_default();
-        let security = match fields[5] {
+        let currently_used: bool = fields[0] == "yes";
+        let bssid = fields[1].to_string(); // The second field should be BSSID
+        let signal_strength = fields[2].parse::<i32>().unwrap_or_default();
+        let frequency = fields[3].parse::<u32>().unwrap_or_default();
+        let channel = fields[4].parse::<u8>().unwrap_or_default();
+        let security = match fields[6] {
             "OPEN" => WifiSecurity::OPEN,
             "WEP" => WifiSecurity::WEP,
             "WPA" => WifiSecurity::WPA,
@@ -50,7 +51,7 @@ pub fn get_networks() -> Result<Vec<WifiNetwork>, WifiManagerError> {
             _ => WifiSecurity::UNKNOWN,
         };
 
-        let network_mode = match fields[6] {
+        let network_mode = match fields[7] {
             "Infra" => Networkmode::INFRA,
             "Ad-Hoc" => Networkmode::IBSS,
             "Monitor" => Networkmode::MONITOR,
@@ -149,7 +150,7 @@ pub fn get_networks() -> Result<Vec<WifiNetwork>, WifiManagerError> {
             security,
             is_hidden: false,
             speed: None,
-            currently_used: false, // Based on the first column
+            currently_used,
             network_mode,
         });
     }

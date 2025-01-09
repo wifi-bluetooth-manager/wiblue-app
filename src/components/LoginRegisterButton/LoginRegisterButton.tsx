@@ -2,7 +2,6 @@ import styles from "./styles.module.scss";
 type ButtonProps = {
   type: "submit" | "button" | "image";
   value?: string;
-  className?: string;
   customWidth?: string;
   customHeight?: string;
   bgColor?: string;
@@ -16,7 +15,6 @@ type ButtonProps = {
 const LoginRegisterButton = ({
   type,
   value = undefined,
-  className = undefined,
   customWidth = undefined,
   customHeight = undefined,
   bgColor = undefined,

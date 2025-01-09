@@ -19,7 +19,7 @@ export default function NetworkTable({ networks }: NetworkTableProps) {
           <div>Frequency</div>
           <div>Hidden</div>
           <div>BSSID</div>
-          <div>Speed</div>
+          {/* <div>Speed</div> */}
           <div>Connect</div>
         </div>
         {networks.map((nt, i) => (
