@@ -1,3 +1,4 @@
+use std::fs::{remove_file, File};
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
 
@@ -8,16 +9,21 @@ enum ConnectionType {
     NOPASSWORD,
 }
 
+const TEMP_FILE_PATH: &str = "passwd-file";
+
 pub fn connect(bssid: &str, password: Option<&str>) -> Result<(), WifiConnectionError> {
     let mut command = Command::new("nmcli");
 
     if let Some(pass) = password {
+        let mut file = File::create(TEMP_FILE_PATH).expect("Failed to create file");
+        writeln!(file, "{}", pass).expect("Failed to write to file");
         command.args(&[
-            "dev", "wifi", "connect", bssid, "password",
+            "dev", "wifi", "connect", bssid,
+            "password",
             // "--key-mgmt",
             // "wpa-psk",
             // &format!("\"{}\"", pass),
-            pass,
+            // pass,
         ]);
     } else {
         command.args(&["dev", "wifi", "connect", bssid]);
@@ -33,42 +39,8 @@ pub fn connect(bssid: &str, password: Option<&str>) -> Result<(), WifiConnection
     }
 
     let error_msg = String::from_utf8_lossy(&output.stderr).to_string();
-
-    if error_msg.contains("wireless-security.psk") {
-        return Err(handle_error(bssid, output, password, error_msg));
-    } else {
-        let mut command = Command::new("nmcli");
-
-        command
-            .args(&["dev", "wifi", "connect", bssid, "--ask"])
-            .stdin(Stdio::piped());
-
-        let mut child = command.spawn().expect("Failure to execute nmcli");
-
-        if let Some(pass) = password {
-            if let Some(ref mut stdin) = child.stdin {
-                if writeln!(stdin, "{}", pass).is_err() {
-                    eprintln!("Failed to insert password into ask command");
-                    return Err(WifiConnectionError::UnknownError);
-                }
-            }
-        }
-
-        let output = child
-            .wait_with_output()
-            .expect("Failed to read nmcli output");
-
-        if output.status.success() {
-            println!("connected successfully with ask");
-            return Ok(());
-        } else {
-            eprintln!(
-                "Failed to connect. Error: {}",
-                String::from_utf8_lossy(&output.stderr)
-            );
-            return Err(WifiConnectionError::AskingError);
-        }
-    }
+    //remove_file(TEMP_FILE_PATH).expect("Removing file failed");
+    Err(handle_error(bssid, output, password, error_msg))
 }
 
 fn handle_error(
