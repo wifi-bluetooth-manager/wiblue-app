@@ -2,15 +2,15 @@ type TData = string | Object;
 type TPutData = string | Object | undefined;
 type THeaders = HeadersInit | undefined;
 
-export class OneLastError extends Error {
+export class OneLastError {
   public title: string = "";
   public error: string = "";
+  public status: number = 200;
 
-  constructor(errorText: string = "An unknown error occurred") {
-    super("OneLastFetch went wrong");
-    this.name = "OneLastError";
+  constructor(errorText: string, status: number) {
     this.title = "OneLastFetch went wrong";
     this.error = errorText;
+    this.status = status;
   }
 
   toString() {
@@ -50,14 +50,13 @@ export class OneLastFetch {
           : new Headers(this.defaultHeaders),
         body: JSON.stringify(data),
       });
-      console.log(response);
+
       if (!response.ok) {
         const errorText = await response.text();
         if (response.status == 502) {
           throw new Error("502");
         }
-        console.log(new OneLastError().toString());
-        return await response.json();
+        throw new OneLastError(errorText, response.status).toString();
         // throw new Error(`OneLastPost went wrong (${errorText}})`);
       }
       return await response.json();
@@ -67,7 +66,11 @@ export class OneLastFetch {
       headers: this.defaultHeaders,
     });
 
-    if (!response.ok) throw new Error("OneLastPost went wrong");
+    if (!response.ok)
+      throw new OneLastError(
+        "Onelastpost went wrong",
+        response.status,
+      ).toString();
     return await response.json();
   }
 
@@ -97,7 +100,7 @@ export class OneLastFetch {
     if (!response.ok) {
       const errorText = await response.text();
       //      throw { title: "OneLastPut went wrong", error: errorText };
-      throw new OneLastError(errorText);
+      throw new OneLastError(errorText, response.status).toString();
     }
     return await response.json();
   }

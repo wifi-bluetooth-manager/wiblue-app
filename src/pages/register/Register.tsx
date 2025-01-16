@@ -8,8 +8,11 @@ import Regex from "../../constants/regex";
 import FormErrorParahraph from "../../components/FormError/FormErrorParagraph";
 import AuthConst from "../../constants/auth";
 import LoginRegisterButton from "../../components/LoginRegisterButton/LoginRegisterButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss"; // Import styles module
+import toast from "react-hot-toast";
+import useUserContext from "../../contexts/userContextProvider";
+import { useEffect } from "react";
 
 export default function Login() {
   type formProps = Pick<User, "email" | "username"> & {
@@ -24,15 +27,43 @@ export default function Login() {
     getValues,
     setError,
   } = useForm<formProps>();
+  const { UserDispatch } = useUserContext();
+
+  const navi = useNavigate();
 
   const onSubmit: SubmitHandler<formProps> = async (data) => {
-    const response = await OLF.post(ApiLinks.register, {
-      username: data.username,
-      email: data.email,
-      password: data.password,
+    const response = fetch(ApiLinks.register, {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      }),
     });
+    response
+      .then((data) => {
+        data.json().then((res) => {
+          console.log(res.message);
+          console.log(data.status);
+          const message = res.message;
 
-    console.log(response);
+          if (data.status == 400) {
+            toast.error(message ?? "Error while registering");
+          } else {
+            toast.success("User registered successfully");
+            UserDispatch({ type: "setUsername", value: message.user.username });
+            UserDispatch({ type: "setId", value: message.user.id });
+            UserDispatch({ type: "setEmail", value: message.user.email });
+            navi("/");
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // const navi = useNavigate();
+    // navi("/");
   };
 
   return (

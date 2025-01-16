@@ -5,16 +5,15 @@ import { useEffect } from "react";
 import useUserContext from "./contexts/userContextProvider.tsx";
 
 function App() {
-  const { UserDispatch } = useUserContext();
-  useEffect(() => {
-    UserDispatch({ type: "setUsername", value: "tomek" });
-    UserDispatch({ type: "setId", value: "123j-25as-09vf-123b" });
-  }, []);
+  // const { UserDispatch } = useUserContext();
+  // useEffect(() => {
+  //   UserDispatch({ type: "setUsername", value: "tomek" });
+  //   UserDispatch({ type: "setId", value: "123j-25as-09vf-123b" });
+  // }, []);
   return (
     <div>
       <NavbarModel />
       <Networks />
-      <Toaster position={"top-center"} />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import Account from "./pages/account/Account";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import SavedNetworks from "./pages/savedNetworks/SavedNetworks";
+import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -21,5 +22,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </Routes>
       </BrowserRouter>
     </UserContextProvider>
+    <Toaster position={"top-center"} />
   </React.StrictMode>,
 );

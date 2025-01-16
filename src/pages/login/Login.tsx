@@ -10,6 +10,8 @@ import ApiLinks from "../../constants/apilinks";
 import styles from "./styles.module.scss";
 import LoginRegisterButton from "../../components/LoginRegisterButton/LoginRegisterButton";
 import Regex from "../../constants/regex";
+import useUserContext from "../../contexts/userContextProvider";
+import toast from "react-hot-toast";
 
 const Login = () => {
   type formProps = {
@@ -29,6 +31,8 @@ const Login = () => {
     getValues,
     setError,
   } = useForm<formProps>();
+  const navi = useNavigate();
+  const { UserDispatch } = useUserContext();
 
   const [loginOption, setLoginOption] = useState<"email" | "username">("email");
 
@@ -38,14 +42,38 @@ const Login = () => {
         ? ApiLinks.loginEmail
         : ApiLinks.loginUsername;
 
-    const response = await OLF.post(loginLink, {
-      [loginOption === loginOptions.email
-        ? loginOptions.email
-        : loginOptions.username]: getValues().credential,
-      password: getValues().password,
+    const response = fetch(loginLink, {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({
+        [loginOption === loginOptions.email
+          ? loginOptions.email
+          : loginOptions.username]: data.credential,
+        password: data.password,
+      }),
     });
-    const navi = useNavigate();
-    navi("/");
+
+    response
+      .then((data) => {
+        data.json().then((res) => {
+          console.log(res.message);
+          console.log(data.status);
+          const message = res.message;
+
+          if (data.status == 400 || data.status == 404) {
+            toast.error(message ?? "Error while login");
+          } else {
+            toast.success("User registered successfully");
+            UserDispatch({ type: "setUsername", value: message.user.username });
+            UserDispatch({ type: "setId", value: message.user.id });
+            UserDispatch({ type: "setEmail", value: message.user.email });
+            navi("/");
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
