@@ -11,6 +11,13 @@ export type WifiNetwork = {
   networkMode: NetworkMode;
 };
 
+export type DBWifiNetwork = {
+  ssid: string;
+  bssid: string;
+  security: WifiSecurity;
+  mode: NetworkMode;
+};
+
 export enum WifiSecurity {
   OPEN,
   WEP,

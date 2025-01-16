@@ -1,4 +1,5 @@
 import Themes from "../constants/themes";
+import { DBWifiNetwork, WifiNetwork } from "../types/network";
 import { User as UserEntityType } from "../types/user";
 import React, { ReactNode, createContext, useContext, useReducer } from "react";
 
@@ -26,6 +27,10 @@ type UserAction =
   | {
       type: "setId";
       value: string | null;
+    }
+  | {
+      type: "setSeenNetworks";
+      value: DBWifiNetwork[] | null;
     };
 
 const UserReducer = (
@@ -43,6 +48,8 @@ const UserReducer = (
       return { ...state, email: action.value };
     case "setId":
       return { ...state, userId: action.value };
+    case "setSeenNetworks":
+      return { ...state, seenNetworks: action.value };
     default:
       return state;
   }
@@ -68,6 +75,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     accountNonExpired: null,
     accountNonLocked: null,
     credentialsNonExpired: null,
+    seenNetworks: null,
   } as UserEntityType);
 
   return (

@@ -1,4 +1,7 @@
+import { DBWifiNetwork } from "./network";
+
 export type User = {
+  seenNetworks: DBWifiNetwork[] | null;
   username: string | null;
   profilePicture: string | null;
   theme: string;
