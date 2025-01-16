@@ -58,6 +58,7 @@ pub enum Networkmode {
     BRIDGE,
     // Amplifies Wi-Fi signal to extend range (Repeater)
     REPEATER,
+    UNKNOWN,
 }
 
 // Enum for Wi-Fi security protocols

@@ -1,10 +1,9 @@
-const host = "http://localhost:8080";
+const host = "http://localhost:8000";
 
 const ApiLinks = {
-  register: host + "/auth/register",
-  loginEmail: host + "/auth/login/email",
-  loginUsername: host + "/auth/login/username",
-  validateAccount: host + "/`auth/validate",
+  register: host + "/signup",
+  loginEmail: host + "/login_email/",
+  loginUsername: host + "/login_username/",
 } as const;
 
 export default ApiLinks;

@@ -62,7 +62,7 @@ pub fn get_networks() -> Result<Vec<WifiNetwork>, WifiManagerError> {
             "P2P" => Networkmode::P2P,
             "Bridge" => Networkmode::BRIDGE,
             "Repeater" => Networkmode::REPEATER,
-            _ => Networkmode::INFRA,
+            _ => Networkmode::UNKNOWN,
         };
         let modes = vec![
             Networkmode::INFRA,

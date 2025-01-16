@@ -9,22 +9,11 @@ enum ConnectionType {
     NOPASSWORD,
 }
 
-const TEMP_FILE_PATH: &str = "passwd-file";
-
 pub fn connect(bssid: &str, password: Option<&str>) -> Result<(), WifiConnectionError> {
     let mut command = Command::new("nmcli");
 
     if let Some(pass) = password {
-        let mut file = File::create(TEMP_FILE_PATH).expect("Failed to create file");
-        writeln!(file, "{}", pass).expect("Failed to write to file");
-        command.args(&[
-            "dev", "wifi", "connect", bssid,
-            "password",
-            // "--key-mgmt",
-            // "wpa-psk",
-            // &format!("\"{}\"", pass),
-            // pass,
-        ]);
+        command.args(&["dev", "wifi", "connect", bssid, "password", pass]);
     } else {
         command.args(&["dev", "wifi", "connect", bssid]);
     }

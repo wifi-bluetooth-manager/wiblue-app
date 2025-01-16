@@ -6,7 +6,7 @@ export class OneLastError extends Error {
   public title: string = "";
   public error: string = "";
 
-  constructor(errorText: string) {
+  constructor(errorText: string = "An unknown error occurred") {
     super("OneLastFetch went wrong");
     this.name = "OneLastError";
     this.title = "OneLastFetch went wrong";
@@ -50,13 +50,15 @@ export class OneLastFetch {
           : new Headers(this.defaultHeaders),
         body: JSON.stringify(data),
       });
-
+      console.log(response);
       if (!response.ok) {
         const errorText = await response.text();
         if (response.status == 502) {
           throw new Error("502");
         }
-        throw new Error(`OneLastPost went wrong (${errorText}})`);
+        console.log(new OneLastError().toString());
+        return await response.json();
+        // throw new Error(`OneLastPost went wrong (${errorText}})`);
       }
       return await response.json();
     }
