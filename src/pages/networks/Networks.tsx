@@ -51,13 +51,10 @@ export default function Networks() {
           } else {
             toast.success("Added networks to seen networks");
             data.json().then((res) => {
-              const fetchedDBWifis: DBWifiNetwork[] = JSON.parse(res).map(
-                (network: any) => ({
-                  ...network,
-                  networkMode:
-                    network.network_mode.toUpperCase() as NetworkMode,
-                }),
-              );
+              console.log(res);
+              const fetchedDBWifis: DBWifiNetwork[] = res.message;
+              console.log("fetcheed dbwifi");
+              console.log(fetchedDBWifis);
               UserDispatch({
                 type: "setSeenNetworks",
                 value: (User.seenNetworks || []).concat(fetchedDBWifis),
@@ -82,7 +79,7 @@ export default function Networks() {
     setInterval(async () => {
       await getNetworks();
       console.log("Scanning...");
-    }, 10000);
+    }, 1000000);
   };
 
   return (

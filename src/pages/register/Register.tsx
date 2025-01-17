@@ -47,6 +47,7 @@ export default function Login() {
           console.log(res.message);
           console.log(data.status);
           const message = res.message;
+          localStorage.setItem("token", message.token);
 
           if (data.status == 400) {
             toast.error(message ?? "Error while registering");
