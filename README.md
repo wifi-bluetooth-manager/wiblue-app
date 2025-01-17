@@ -7,3 +7,8 @@
 
 - pnpm install
 - pnpm tauri dev
+
+## sad information
+
+- unfortunatelly i havent been able to fix connecting by passowrd.
+- it should be fixed with projects next iteration
