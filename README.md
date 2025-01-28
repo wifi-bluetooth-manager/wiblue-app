@@ -2,6 +2,8 @@
 
 ## prerequisites
 - https://v2.tauri.app/start/prerequisites/
+- network manager
+- linux machine
 
 ## how to run
 
